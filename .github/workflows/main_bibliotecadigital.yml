@@ -59,8 +59,10 @@ jobs:
         with:
           app-name: 'Bibliotecadigital'
           slot-name: 'Production'
-          package: '*.jar'
+          package: 'java-app/*.jar'
+
 
           
+
 
 
