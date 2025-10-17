@@ -60,4 +60,5 @@ jobs:
           app-name: 'Bibliotecadigital'
           slot-name: 'Production'
           package: '*.jar'
+
           
