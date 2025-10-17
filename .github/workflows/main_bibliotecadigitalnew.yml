@@ -6,7 +6,7 @@ name: Build and deploy JAR app to Azure Web App - bibliotecadigitalnew
 # Este workflow ahora se ejecuta cuando el workflow de CI de tests y CodeQL termina exitosamente
 on:
   workflow_run:
-    workflows: ["codeqlytest.yml"]  # nombre exacto de tu workflow de tests + CodeQL
+    workflows: ["CodeQL + Unit Tests"]
     types:
       - completed
 
@@ -70,3 +70,4 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           package: '*.jar'
+
