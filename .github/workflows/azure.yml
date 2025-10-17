@@ -10,7 +10,7 @@ on:
     - cron: '0 * * * *'  # cada hora
 
 env:
-  AZURE_WEBAPP_NAME: 'Bibliotecadigital'
+  AZURE_WEBAPP_NAME: 'bibliotecadigital'  # debe coincidir exactamente con tu App Service en Azure
   POM_XML_DIRECTORY: 'biblioteca'
   JAVA_VERSION: '17'
   DISTRIBUTION: 'temurin'
@@ -98,10 +98,12 @@ jobs:
         run: |
           cd ${{ env.POM_XML_DIRECTORY }}
           mvn -B clean package -DskipTests
+          echo "Contenido del target:"
+          ls -la target
 
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: '${{ env.POM_XML_DIRECTORY }}/target/*.jar'
+          package: '${{ env.POM_XML_DIRECTORY }}/target/biblioteca-simple-1.0-SNAPSHOT.jar'
