@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: CodeQL + Tests + Deploy to Azure Web App - bibliotecadigitalnew
+name: CodeQL, Unit Tests and Deploy - bibliotecadigitalnew
 
 on:
   push:
@@ -13,11 +13,10 @@ env:
   AZURE_WEBAPP_NAME: 'bibliotecadigitalnew'
   JAVA_VERSION: '21'
   DISTRIBUTION: 'microsoft'
-  POM_XML_DIRECTORY: '.'
-  JAR_NAME: 'bibliotecadigitalnew.jar'
+  POM_XML_DIRECTORY: '.'  # Ajusta si tu pom.xml está en otra carpeta
 
 jobs:
-  test_and_codeql:
+  build_test_codeql:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -30,14 +29,6 @@ jobs:
         with:
           distribution: ${{ env.DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
-
-      # Limpiar carpeta target
-      - name: Clean target folder
-        run: rm -rf target/
-
-      # Ejecutar tests unitarios
-      - name: Run unit tests
-        run: mvn clean test
 
       # Inicializar CodeQL
       - name: Initialize CodeQL
@@ -45,40 +36,37 @@ jobs:
         with:
           languages: java
 
+      # Compilar proyecto (sin tests) para que CodeQL vea el código
+      - name: Build Project for CodeQL
+        run: mvn clean package -DskipTests
+
+      # Ejecutar pruebas unitarias
+      - name: Run unit tests
+        run: mvn test
+
       # Ejecutar análisis CodeQL
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
 
-  build_and_deploy:
+      # Subir artifact para despliegue
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-app
+          path: ${{ env.POM_XML_DIRECTORY }}/target/*.jar
+
+  deploy:
     runs-on: ubuntu-latest
-    needs: test_and_codeql
+    needs: build_test_codeql
     permissions:
       id-token: write
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: ${{ env.DISTRIBUTION }}
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Clean target folder
-        run: rm -rf target/
-
-      - name: Build JAR
-        run: mvn clean package -DskipTests
-
-      - name: Rename JAR
-        run: mv target/*.jar target/${{ env.JAR_NAME }}
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
         with:
           name: java-app
-          path: target/${{ env.JAR_NAME }}
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -93,4 +81,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
-          package: target/${{ env.JAR_NAME }}
+          package: '*.jar'
