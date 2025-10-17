@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build, CodeQL, Tests and Deploy - bibliotecadigitalnew
+name: Build, CodeQL, Test and Deploy - bibliotecadigitalnew
 
 on:
   push:
@@ -16,14 +16,16 @@ env:
   POM_XML_DIRECTORY: '.'  # Ajusta si tu pom.xml está en otra carpeta
 
 jobs:
-  build:
+  codeql_and_build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write        # necesario para CodeQL
+      security-events: write # necesario para CodeQL
 
     steps:
       - uses: actions/checkout@v4
 
+      # Configuración de Java
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -32,23 +34,23 @@ jobs:
 
       # Inicializar CodeQL
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: java
 
-      # Compilar proyecto para que CodeQL vea el código
-      - name: Build Project for CodeQL
-        run: mvn clean package -DskipTests
+      # Build de Maven (sin saltarse tests, ejecutará después los JUnit)
+      - name: Build with Maven
+        run: mvn -B clean package
 
-      # Ejecutar pruebas unitarias
-      - name: Run unit tests
+      # Ejecutar CodeQL
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      # Ejecutar JUnit tests
+      - name: Run Unit Tests
         run: mvn test
 
-      # Analizar con CodeQL
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-
-      # Subir artifact para despliegue
+      # Subir artefacto para despliegue
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -57,7 +59,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: codeql_and_build
     permissions:
       id-token: write
       contents: read
