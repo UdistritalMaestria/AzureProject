@@ -3,12 +3,8 @@
 
 name: Build and deploy JAR app to Azure Web App - bibliotecadigitalnew
 
-# Este workflow ahora se ejecuta cuando el workflow de CI de tests y CodeQL termina exitosamente
 on:
-  workflow_run:
-    workflows: ["CodeQL + Unit Tests"]
-    types:
-      - completed
+  workflow_dispatch:
 
 env:
   AZURE_WEBAPP_NAME: 'bibliotecadigitalnew'
@@ -18,7 +14,6 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -43,13 +38,12 @@ jobs:
           path: ${{ env.POM_XML_DIRECTORY }}/target/*.jar
 
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     needs: build
     permissions:
       id-token: write
       contents: read
-
+  
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -70,4 +64,3 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'Production'
           package: '*.jar'
-
