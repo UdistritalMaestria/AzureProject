@@ -17,7 +17,7 @@ Una aplicación web simple para gestionar una biblioteca, construida con Spring 
 ## Ejecución Local
 
 ```bash
-git clone https://github.com/TestingUD-Gis/ProyectoBiblioteca.git
+git clone https://github.com/UdistritalMaestria/AzureProject.git
 cd biblioteca
 mvn clean spring-boot:run
 ```
