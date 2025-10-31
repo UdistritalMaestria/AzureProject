@@ -1,2 +1,4 @@
+com\mcic\steps\BibliotecaSteps.class
 com\mcic\models\LibroTest.class
+com\mcic\RunCucumberTest.class
 com\mcic\SmokeTest.class

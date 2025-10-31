@@ -4,19 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    
     <groupId>com.biblioteca</groupId>
     <artifactId>biblioteca-simple</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.2</junit.version>
+        <cucumber.version>7.18.0</cucumber.version>
     </properties>
-
+    
     <dependencies>
         <!-- Spring Boot Web -->
         <dependency>
@@ -31,8 +32,8 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>3.1.0</version>
         </dependency>
-
-        <!-- JUnit para pruebas -->
+        
+        <!-- JUnit 5 para pruebas unitarias -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -45,8 +46,37 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        
+        <!-- JUnit Platform Suite API (necesario para @Suite en Cucumber Runner) -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+            <version>1.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JUnit Platform Suite Engine: permite descubrimiento/ejecución de clases anotadas con @Suite -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <version>1.9.2</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Cucumber para BDD -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
             <!-- Plugin Spring Boot: genera un JAR ejecutable -->
@@ -62,7 +92,19 @@
                     </execution>
                 </executions>
             </plugin>
-
+            
+            <!-- Surefire: ejecuta tests unitarios + Cucumber -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            
             <!-- JaCoCo para cobertura -->
             <plugin>
                 <groupId>org.jacoco</groupId>

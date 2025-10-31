@@ -1,7 +1,6 @@
 package com.mcic.models;
 
 public class Libro {
-
     private String id;
     private String titulo;
     private String autor;
@@ -17,6 +16,25 @@ public class Libro {
         this.isbn = isbn;
     }
 
+    // Método de validación
+    public void validar() throws IllegalArgumentException {
+        if (titulo == null || titulo.trim().isEmpty()) {
+            throw new IllegalArgumentException("El título no puede estar vacío");
+        }
+        if (autor == null || autor.trim().isEmpty()) {
+            throw new IllegalArgumentException("El autor no puede estar vacío");
+        }
+        if (isbn == null || isbn.trim().isEmpty()) {
+            throw new IllegalArgumentException("El ISBN no puede estar vacío");
+        }
+        // Remover guiones y espacios para validar longitud
+        String isbnLimpio = isbn.replaceAll("[\\s-]", "");
+        if (isbnLimpio.length() < 10) {
+            throw new IllegalArgumentException("El ISBN debe tener al menos 10 caracteres");
+        }
+    }
+
+    // Getters y Setters
     public String getId() {
         return id;
     }
@@ -48,5 +66,4 @@ public class Libro {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-
 }
