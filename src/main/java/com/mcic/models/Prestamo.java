@@ -6,6 +6,8 @@ public class Prestamo {
     private String id;
     private String usuarioId;
     private String libroId;
+    private String usuarioNombre;
+    private String libroTitulo;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private boolean devuelto;
@@ -43,6 +45,22 @@ public class Prestamo {
 
     public void setLibroId(String libroId) {
         this.libroId = libroId;
+    }
+
+    public String getUsuarioNombre() {
+        return usuarioNombre;
+    }
+
+    public void setUsuarioNombre(String usuarioNombre) {
+        this.usuarioNombre = usuarioNombre;
+    }
+
+    public String getLibroTitulo() {
+        return libroTitulo;
+    }
+
+    public void setLibroTitulo(String libroTitulo) {
+        this.libroTitulo = libroTitulo;
     }
 
     public LocalDateTime getFechaInicio() {

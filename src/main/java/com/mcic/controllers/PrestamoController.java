@@ -58,6 +58,22 @@ public class PrestamoController {
         }
 
         Prestamo p = new Prestamo(store.nextPrestamoId(), usuarioId, libroId);
+        
+        // Obtener nombre del usuario
+        Optional<?> uOpt = store.getUsuarios().stream().filter(x -> x.getId().equals(usuarioId)).findFirst();
+        if (uOpt.isPresent()) {
+            Object usuario = uOpt.get();
+            try {
+                String nombre = (String) usuario.getClass().getMethod("getNombre").invoke(usuario);
+                p.setUsuarioNombre(nombre);
+            } catch (Exception e) { }
+        }
+        
+        // Obtener título del libro
+        if (l.isPresent()) {
+            p.setLibroTitulo(l.get().getTitulo());
+        }
+        
         p.setFechaInicio(LocalDateTime.now());
         store.getPrestamos().add(p);
         return ResponseEntity.ok(p);

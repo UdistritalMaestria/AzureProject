@@ -3,39 +3,324 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Biblioteca - Dashboard</title>
+    <title>Biblioteca UD</title>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-      * { box-sizing: border-box; }
-      body { font-family: "Poppins", sans-serif; background: #f4f6fb; margin:0; }
-      .layout { display:flex; min-height:100vh; }
-      .sidebar { width:220px; background:#263238; color:white; padding:20px; }
-      .brand { font-weight:700; font-size:1.1rem; margin-bottom:20px; }
-      .nav { display:flex; flex-direction:column; gap:8px; }
-      .nav button { background:transparent; color:inherit; border:none; text-align:left; padding:10px 12px; border-radius:8px; cursor:pointer; font-size:0.95rem; }
-      .nav button.active, .nav button:hover { background:#37474f; }
-      .main { flex:1; padding:28px; }
-      .container { max-width:1100px; margin:auto; background:white; padding:24px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.06); }
-      h1 { color:#1e293b; }
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        margin: 0;
+        min-height: 100vh;
+      }
+      .layout {
+        display: flex;
+        min-height: 100vh;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+      }
+      .sidebar {
+        width: 240px;
+        background: linear-gradient(180deg, #2c3e50 0%, #1a2530 100%);
+        color: white;
+        padding: 24px 16px;
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+      }
+      .brand {
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 32px;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brand:before {
+        content: "📚";
+        font-size: 1.5rem;
+      }
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .nav button {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        border: none;
+        text-align: left;
+        padding: 12px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav button:before {
+        font-size: 1.1rem;
+      }
+      #btn-dashboard:before {
+        content: "📊";
+      }
+      #btn-libros:before {
+        content: "📖";
+      }
+      #btn-usuarios:before {
+        content: "👥";
+      }
+      #btn-prestamos:before {
+        content: "🔖";
+      }
+      .nav button.active,
+      .nav button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        transform: translateX(4px);
+      }
+      .main {
+        flex: 1;
+        padding: 28px;
+      }
+      .container {
+        max-width: 1100px;
+        margin: auto;
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+      }
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-weight: 700;
+        font-size: 1.8rem;
+      }
+      .welcome-text {
+        color: #7f8c8d;
+        line-height: 1.6;
+      }
       /* reusar estilos simples */
-      .form-section { background:#f5f7ff; padding:18px; border-radius:12px; margin-bottom:20px; border:1px solid #e0e7ff; }
-      .form-group { margin-bottom:12px; }
-      .error { color:#b00020; margin-bottom:10px; }
-      label { display:block; font-weight:500; margin-bottom:6px; }
-      input, select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ccc; }
-      button.primary { background: linear-gradient(135deg,#3f51b5,#5c6bc0); color:white; padding:8px 14px; border:none; border-radius:8px; cursor:pointer; }
-      table { width:100%; border-collapse:collapse; margin-top:12px; }
-      th, td { padding:10px; text-align:left; }
-      th { background:#3f51b5; color:white; }
-      .small-btn { background:#efefef; border-radius:6px; padding:6px 8px; border:none; cursor:pointer; }
+      .form-section {
+        background: linear-gradient(135deg, #f8f9ff 0%, #edf0ff 100%);
+        padding: 22px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        border: 1px solid #e0e7ff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .error {
+        color: #e74c3c;
+        margin-bottom: 10px;
+        background: rgba(231, 76, 60, 0.1);
+        padding: 10px 12px;
+        border-radius: 6px;
+        border-left: 4px solid #e74c3c;
+        font-size: 0.9rem;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-size: 0.95rem;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s;
+        background: white;
+      }
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+      }
+      button.primary {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+      }
+      button.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 14px 16px;
+        text-align: left;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      th {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+      }
+      tr:hover {
+        background: #f8f9fa;
+      }
+      .small-btn {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 8px 12px;
+        border: none;
+        cursor: pointer;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.2s;
+        margin: 0 2px;
+        border: 1px solid #e0e0e0;
+      }
+      .small-btn:hover {
+        background: #e9ecef;
+        transform: translateY(-1px);
+      }
+      .btn-success {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+        border: none;
+      }
+      .btn-danger {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+      }
+      .btn-warning {
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: white;
+        border: none;
+      }
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .status-active {
+        background: rgba(46, 204, 113, 0.15);
+        color: #27ae60;
+      }
+      .status-pending {
+        background: rgba(243, 156, 18, 0.15);
+        color: #e67e22;
+      }
+      .status-returned {
+        background: rgba(52, 152, 219, 0.15);
+        color: #2980b9;
+      }
+      /* Contenedor principal del dashboard */
+      .dashboard-header {
+        text-align: left;
+        margin-bottom: 32px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #eef2f7;
+      }
+
+      .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+      }
+
+      .dashboard-header .welcome-text {
+        font-size: 1rem;
+        color: #7f8c8d;
+        margin-top: 6px;
+      }
+
+      /* GRID DE ESTADÍSTICAS */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        margin-top: 30px;
+      }
+
+      /* Tarjetas individuales */
+      .stat-card {
+        background: white;
+        padding: 22px 24px;
+        border-radius: 18px;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.3s ease;
+        cursor: default;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Icono de la tarjeta */
+      .stat-icon {
+        font-size: 2rem;
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #f0f3ff, #e4e9ff);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.04);
+      }
+
+      /* Texto y números de la tarjeta */
+      .stat-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+      }
     </style>
   </head>
   <body>
     <div class="layout">
       <aside class="sidebar">
-        <div class="brand">Biblioteca — Dashboard</div>
+        <div class="brand">Biblioteca UD</div>
         <nav class="nav">
-          <button id="btn-dashboard" class="active" data-module="dashboard">Dashboard</button>
+          <button id="btn-dashboard" class="active" data-module="dashboard">
+            Dashboard
+          </button>
           <button id="btn-libros" data-module="libros">Libros</button>
           <button id="btn-usuarios" data-module="usuarios">Usuarios</button>
           <button id="btn-prestamos" data-module="prestamos">Préstamos</button>
@@ -43,176 +328,502 @@
       </aside>
       <main class="main">
         <div class="container" id="main-content">
-          <h1>Bienvenido a la Biblioteca</h1>
-          <p>Selecciona un módulo en el menú izquierdo para gestionar libros, usuarios o préstamos.</p>
+          <div class="dashboard-header">
+            <h1>Bienvenido a la Biblioteca UD</h1>
+            <p class="welcome-text">
+              Gestiona todos los recursos de tu biblioteca desde un solo lugar
+            </p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">📚</div>
+              <div class="stat-content">
+                <span class="stat-number" id="total-libros">0</span>
+                <span class="stat-label">Libros Totales</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">👥</div>
+              <div class="stat-content">
+                <span class="stat-number" id="total-usuarios">0</span>
+                <span class="stat-label">Usuarios Registrados</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">🔖</div>
+              <div class="stat-content">
+                <span class="stat-number" id="prestamos-activos">0</span>
+                <span class="stat-label">Préstamos Activos</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">📊</div>
+              <div class="stat-content">
+                <span class="stat-number" id="libros-disponibles">0</span>
+                <span class="stat-label">Libros Disponibles</span>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>
 
     <!-- Banner de notificaciones -->
-    <div id="app-banner" style="position:fixed;right:20px;top:20px;z-index:9999;display:none;min-width:260px;border-radius:8px;padding:12px;color:white;box-shadow:0 8px 20px rgba(0,0,0,0.12)"></div>
+    <div
+      id="app-banner"
+      style="
+        position: fixed;
+        right: 20px;
+        top: 20px;
+        z-index: 9999;
+        display: none;
+        min-width: 300px;
+        border-radius: 12px;
+        padding: 16px 20px;
+        color: white;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        font-weight: 500;
+      "
+    ></div>
 
     <script>
       // Cargar módulo por nombre (fetch del fragmento)
-      async function loadModule(name){
-        const content = document.getElementById('main-content');
-        try{
-          const res = await fetch('/modulos/' + name);
-          if(!res.ok) throw new Error('No se pudo cargar el módulo');
+      async function loadModule(name) {
+        const content = document.getElementById("main-content");
+        try {
+          const res = await fetch("/modulos/" + name);
+          if (!res.ok) throw new Error("No se pudo cargar el módulo");
           const html = await res.text();
           content.innerHTML = html;
           activateModuleButtons(name);
           initModuleScripts(name);
-        }catch(e){ showBanner('error', e.message); }
+          formatDates(); // Formatear fechas después de cargar contenido
+        } catch (e) {
+          showBanner("error", e.message);
+        }
       }
 
-      document.querySelectorAll('.nav button').forEach(b=>{
-        b.addEventListener('click', ()=>{
-          document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
-          b.classList.add('active');
-          const module = b.getAttribute('data-module');
-          if(module==='dashboard'){
-            document.getElementById('main-content').innerHTML = '<h1>Bienvenido a la Biblioteca</h1><p>Selecciona un módulo en el menú izquierdo para gestionar libros, usuarios o préstamos.</p>';
+      // Función para formatear fechas en formato más amigable
+      function formatDates() {
+        document.querySelectorAll(".fecha-formato").forEach((element) => {
+          if (element.textContent) {
+            try {
+              const date = new Date(element.textContent);
+              if (!isNaN(date.getTime())) {
+                element.textContent = date.toLocaleDateString("es-ES", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                });
+              }
+            } catch (e) {
+              console.log("Error formateando fecha:", e);
+            }
+          }
+        });
+      }
+
+      document.querySelectorAll(".nav button").forEach((b) => {
+        b.addEventListener("click", () => {
+          document
+            .querySelectorAll(".nav button")
+            .forEach((x) => x.classList.remove("active"));
+          b.classList.add("active");
+          const module = b.getAttribute("data-module");
+          if (module === "dashboard") {
+            document.getElementById("main-content").innerHTML = `
+              <div class="dashboard-header">
+            <h1>Bienvenido a la Biblioteca UD</h1>
+            <p class="welcome-text">
+              Gestiona todos los recursos de tu biblioteca desde un solo lugar
+            </p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">📚</div>
+              <div class="stat-content">
+                <span class="stat-number" id="total-libros">0</span>
+                <span class="stat-label">Libros Totales</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">👥</div>
+              <div class="stat-content">
+                <span class="stat-number" id="total-usuarios">0</span>
+                <span class="stat-label">Usuarios Registrados</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">🔖</div>
+              <div class="stat-content">
+                <span class="stat-number" id="prestamos-activos">0</span>
+                <span class="stat-label">Préstamos Activos</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">📊</div>
+              <div class="stat-content">
+                <span class="stat-number" id="libros-disponibles">0</span>
+                <span class="stat-label">Libros Disponibles</span>
+              </div>
+            </div>
+          </div>
+            `;
           } else {
             loadModule(module);
           }
         });
       });
 
-      function activateModuleButtons(name){
+      function activateModuleButtons(name) {
         // placeholder if modules require button highlighting inside
       }
 
-      function initModuleScripts(name){
-        if(name==='usuarios'){
-          const btn = document.getElementById('btn-crear-usuario');
-          if(btn) btn.addEventListener('click', async (e)=>{
-            e.preventDefault();
-            const nombre = document.getElementById('u-nombre').value;
-            const email = document.getElementById('u-email').value;
-            const telefono = document.getElementById('u-telefono') ? document.getElementById('u-telefono').value : '';
-            const fechaNacimiento = document.getElementById('u-fechaNacimiento') ? document.getElementById('u-fechaNacimiento').value : '';
-            const uErr = document.getElementById('u-error'); if(uErr){ uErr.style.display='none'; uErr.textContent=''; }
-            if(!nombre || !nombre.trim()){ if(uErr){ uErr.textContent='El nombre es obligatorio'; uErr.style.display='block'; } showBanner('error','El nombre es obligatorio'); return; }
-            const emailRegex = /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/;
-            if(!email || !emailRegex.test(email)){ if(uErr){ uErr.textContent='Email inválido'; uErr.style.display='block'; } showBanner('error','Email inválido'); return; }
-            if(telefono && telefono.replace(/[^0-9]/g,'').length < 7){ if(uErr){ uErr.textContent='Teléfono inválido'; uErr.style.display='block'; } showBanner('error','Teléfono inválido'); return; }
-            if(fechaNacimiento){ try{ const d = new Date(fechaNacimiento); if(isNaN(d.getTime())){ throw new Error('invalid'); } const today = new Date(); if(d > today){ if(uErr){ uErr.textContent='Fecha de nacimiento no puede ser futura'; uErr.style.display='block'; } showBanner('error','Fecha de nacimiento no puede ser futura'); return; } }catch(x){ if(uErr){ uErr.textContent='Formato de fecha inválido (yyyy-MM-dd)'; uErr.style.display='block'; } showBanner('error','Formato de fecha inválido (yyyy-MM-dd)'); return; } }
-            try{
-              const res = await fetch('/api/usuarios/agregar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,fechaNacimiento})});
-              if(res.ok){ showBanner('success','Usuario creado'); loadModule('usuarios'); }
-              else { const txt = await res.text(); showBanner('error', txt || 'Error al crear usuario'); }
-            }catch(err){ showBanner('error', 'Error: '+err.message); }
-          });
-        }
-        if(name==='prestamos'){
-          const btn = document.getElementById('btn-crear-prestamo');
-          if(btn) btn.addEventListener('click', async (e)=>{
-            e.preventDefault();
-            const usuarioId = document.getElementById('p-usuario').value;
-            const libroId = document.getElementById('p-libro').value;
-            const pErr = document.getElementById('p-error'); if(pErr){ pErr.style.display='none'; pErr.textContent=''; }
-            if(!usuarioId){ if(pErr){ pErr.textContent='Selecciona un usuario'; pErr.style.display='block'; } showBanner('error','Selecciona un usuario'); return; }
-            if(!libroId){ if(pErr){ pErr.textContent='Selecciona un libro'; pErr.style.display='block'; } showBanner('error','Selecciona un libro'); return; }
-            try{
-              const res = await fetch('/api/prestamos/crear',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usuarioId,libroId})});
-              if(res.ok){ showBanner('success','Préstamo creado'); loadModule('prestamos'); }
-              else { const txt = await res.text(); showBanner('error', txt || 'Error al crear préstamo'); }
-            }catch(err){ showBanner('error','Error: '+err.message); }
-          });
-        }
-        if(name==='libros'){
-          // manejar submit por JS para evitar redirect al dashboard
-          const form = document.getElementById('form-libro');
-          if(form){
-            form.addEventListener('submit', async function(e){
+      function initModuleScripts(name) {
+        if (name === "usuarios") {
+          const btn = document.getElementById("btn-crear-usuario");
+          if (btn)
+            btn.addEventListener("click", async (e) => {
               e.preventDefault();
-              const titulo = document.getElementById('l-titulo').value;
-              const autor = document.getElementById('l-autor').value;
-              const isbn = document.getElementById('l-isbn').value;
-              const cantidad = document.getElementById('l-cantidad').value || 1;
-              // client-side validation
-              const lErr = document.getElementById('l-error');
-              if(lErr){ lErr.style.display='none'; lErr.textContent=''; }
-              if(!titulo || !titulo.trim()){ if(lErr){ lErr.textContent='El título es obligatorio'; lErr.style.display='block'; } showBanner('error','El título es obligatorio'); return; }
-              if(!autor || !autor.trim()){ if(lErr){ lErr.textContent='El autor es obligatorio'; lErr.style.display='block'; } showBanner('error','El autor es obligatorio'); return; }
-              const isbnClean = (isbn||'').replace(/[-\s]/g,'');
-              if(isbnClean.length < 10){ if(lErr){ lErr.textContent='El ISBN debe tener al menos 10 caracteres'; lErr.style.display='block'; } showBanner('error','El ISBN es inválido'); return; }
-              const qty = parseInt(cantidad,10);
-              if(isNaN(qty) || qty < 1){ if(lErr){ lErr.textContent='La cantidad debe ser un número mayor o igual a 1'; lErr.style.display='block'; } showBanner('error','Cantidad inválida'); return; }
-              try{
-                const res = await fetch('/api/libros/agregar',{
-                  method:'POST', headers:{'Content-Type':'application/json'},
-                  body: JSON.stringify({ titulo, autor, isbn, cantidad: qty })
+              const nombre = document.getElementById("u-nombre").value;
+              const email = document.getElementById("u-email").value;
+              const telefono = document.getElementById("u-telefono")
+                ? document.getElementById("u-telefono").value
+                : "";
+              const fechaNacimiento = document.getElementById(
+                "u-fechaNacimiento"
+              )
+                ? document.getElementById("u-fechaNacimiento").value
+                : "";
+              const uErr = document.getElementById("u-error");
+              if (uErr) {
+                uErr.style.display = "none";
+                uErr.textContent = "";
+              }
+              if (!nombre || !nombre.trim()) {
+                if (uErr) {
+                  uErr.textContent = "El nombre es obligatorio";
+                  uErr.style.display = "block";
+                }
+                showBanner("error", "El nombre es obligatorio");
+                return;
+              }
+              const emailRegex = /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/;
+              if (!email || !emailRegex.test(email)) {
+                if (uErr) {
+                  uErr.textContent = "Email inválido";
+                  uErr.style.display = "block";
+                }
+                showBanner("error", "Email inválido");
+                return;
+              }
+              if (telefono && telefono.replace(/[^0-9]/g, "").length < 7) {
+                if (uErr) {
+                  uErr.textContent = "Teléfono inválido";
+                  uErr.style.display = "block";
+                }
+                showBanner("error", "Teléfono inválido");
+                return;
+              }
+              if (fechaNacimiento) {
+                try {
+                  const d = new Date(fechaNacimiento);
+                  if (isNaN(d.getTime())) {
+                    throw new Error("invalid");
+                  }
+                  const today = new Date();
+                  if (d > today) {
+                    if (uErr) {
+                      uErr.textContent =
+                        "Fecha de nacimiento no puede ser futura";
+                      uErr.style.display = "block";
+                    }
+                    showBanner(
+                      "error",
+                      "Fecha de nacimiento no puede ser futura"
+                    );
+                    return;
+                  }
+                } catch (x) {
+                  if (uErr) {
+                    uErr.textContent = "Formato de fecha inválido (yyyy-MM-dd)";
+                    uErr.style.display = "block";
+                  }
+                  showBanner("error", "Formato de fecha inválido (yyyy-MM-dd)");
+                  return;
+                }
+              }
+              try {
+                const res = await fetch("/api/usuarios/agregar", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    nombre,
+                    email,
+                    telefono,
+                    fechaNacimiento,
+                  }),
                 });
-                if(res.ok){ showBanner('success','Libro agregado'); loadModule('libros'); }
-                else { const txt = await res.text(); showBanner('error', txt || 'Error al agregar libro'); }
-              }catch(err){ showBanner('error','Error: '+err.message); }
+                if (res.ok) {
+                  showBanner("success", "Usuario creado");
+                  loadModule("usuarios");
+                } else {
+                  const txt = await res.text();
+                  showBanner("error", txt || "Error al crear usuario");
+                }
+              } catch (err) {
+                showBanner("error", "Error: " + err.message);
+              }
+            });
+        }
+        if (name === "prestamos") {
+          const btn = document.getElementById("btn-crear-prestamo");
+          if (btn)
+            btn.addEventListener("click", async (e) => {
+              e.preventDefault();
+              const usuarioId = document.getElementById("p-usuario").value;
+              const libroId = document.getElementById("p-libro").value;
+              const pErr = document.getElementById("p-error");
+              if (pErr) {
+                pErr.style.display = "none";
+                pErr.textContent = "";
+              }
+              if (!usuarioId) {
+                if (pErr) {
+                  pErr.textContent = "Selecciona un usuario";
+                  pErr.style.display = "block";
+                }
+                showBanner("error", "Selecciona un usuario");
+                return;
+              }
+              if (!libroId) {
+                if (pErr) {
+                  pErr.textContent = "Selecciona un libro";
+                  pErr.style.display = "block";
+                }
+                showBanner("error", "Selecciona un libro");
+                return;
+              }
+              try {
+                const res = await fetch("/api/prestamos/crear", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ usuarioId, libroId }),
+                });
+                if (res.ok) {
+                  showBanner("success", "Préstamo creado");
+                  loadModule("prestamos");
+                } else {
+                  const txt = await res.text();
+                  showBanner("error", txt || "Error al crear préstamo");
+                }
+              } catch (err) {
+                showBanner("error", "Error: " + err.message);
+              }
+            });
+        }
+        if (name === "libros") {
+          // manejar submit por JS para evitar redirect al dashboard
+          const form = document.getElementById("form-libro");
+          if (form) {
+            form.addEventListener("submit", async function (e) {
+              e.preventDefault();
+              const titulo = document.getElementById("l-titulo").value;
+              const autor = document.getElementById("l-autor").value;
+              const isbn = document.getElementById("l-isbn").value;
+              const cantidad = document.getElementById("l-cantidad").value || 1;
+              // client-side validation
+              const lErr = document.getElementById("l-error");
+              if (lErr) {
+                lErr.style.display = "none";
+                lErr.textContent = "";
+              }
+              if (!titulo || !titulo.trim()) {
+                if (lErr) {
+                  lErr.textContent = "El título es obligatorio";
+                  lErr.style.display = "block";
+                }
+                showBanner("error", "El título es obligatorio");
+                return;
+              }
+              if (!autor || !autor.trim()) {
+                if (lErr) {
+                  lErr.textContent = "El autor es obligatorio";
+                  lErr.style.display = "block";
+                }
+                showBanner("error", "El autor es obligatorio");
+                return;
+              }
+              const isbnClean = (isbn || "").replace(/[-\s]/g, "");
+              if (isbnClean.length < 10) {
+                if (lErr) {
+                  lErr.textContent =
+                    "El ISBN debe tener al menos 10 caracteres";
+                  lErr.style.display = "block";
+                }
+                showBanner("error", "El ISBN es inválido");
+                return;
+              }
+              const qty = parseInt(cantidad, 10);
+              if (isNaN(qty) || qty < 1) {
+                if (lErr) {
+                  lErr.textContent =
+                    "La cantidad debe ser un número mayor o igual a 1";
+                  lErr.style.display = "block";
+                }
+                showBanner("error", "Cantidad inválida");
+                return;
+              }
+              try {
+                const res = await fetch("/api/libros/agregar", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ titulo, autor, isbn, cantidad: qty }),
+                });
+                if (res.ok) {
+                  showBanner("success", "Libro agregado");
+                  loadModule("libros");
+                } else {
+                  const txt = await res.text();
+                  showBanner("error", txt || "Error al agregar libro");
+                }
+              } catch (err) {
+                showBanner("error", "Error: " + err.message);
+              }
             });
           }
 
           // acciones de incrementar/decrementar/eliminar via fetch
-          document.querySelectorAll('[data-increment]').forEach(btn=>btn.addEventListener('click', async (e)=>{
-            const id = btn.getAttribute('data-increment');
-            try{ const res = await fetch('/api/libros/incrementar/' + id, { method: 'POST' });
-              if(res.ok){ showBanner('success','Stock incrementado'); loadModule('libros'); }
-              else showBanner('error','No se pudo incrementar');
-            }catch(err){ showBanner('error','Error: '+err.message); }
-          }));
+          document.querySelectorAll("[data-increment]").forEach((btn) =>
+            btn.addEventListener("click", async (e) => {
+              const id = btn.getAttribute("data-increment");
+              try {
+                const res = await fetch("/api/libros/incrementar/" + id, {
+                  method: "POST",
+                });
+                if (res.ok) {
+                  showBanner("success", "Stock incrementado");
+                  loadModule("libros");
+                } else showBanner("error", "No se pudo incrementar");
+              } catch (err) {
+                showBanner("error", "Error: " + err.message);
+              }
+            })
+          );
 
-          document.querySelectorAll('[data-decrement]').forEach(btn=>btn.addEventListener('click', async (e)=>{
-            const id = btn.getAttribute('data-decrement');
-            try{ const res = await fetch('/api/libros/decrementar/' + id, { method: 'POST' });
-              if(res.ok){ showBanner('success','Stock decrementado'); loadModule('libros'); }
-              else showBanner('error', await res.text());
-            }catch(err){ showBanner('error','Error: '+err.message); }
-          }));
+          document.querySelectorAll("[data-decrement]").forEach((btn) =>
+            btn.addEventListener("click", async (e) => {
+              const id = btn.getAttribute("data-decrement");
+              try {
+                const res = await fetch("/api/libros/decrementar/" + id, {
+                  method: "POST",
+                });
+                if (res.ok) {
+                  showBanner("success", "Stock decrementado");
+                  loadModule("libros");
+                } else showBanner("error", await res.text());
+              } catch (err) {
+                showBanner("error", "Error: " + err.message);
+              }
+            })
+          );
 
-          document.querySelectorAll('[data-delete]').forEach(btn=>btn.addEventListener('click', async (e)=>{
-            const id = btn.getAttribute('data-delete');
-            if(!confirm('Eliminar libro?')) return;
-            try{ const res = await fetch('/api/libros/eliminar/' + id, { method: 'POST' });
-              if(res.ok){ showBanner('success','Libro eliminado'); loadModule('libros'); }
-              else showBanner('error','No se pudo eliminar');
-            }catch(err){ showBanner('error','Error: '+err.message); }
-          }));
+          document.querySelectorAll("[data-delete]").forEach((btn) =>
+            btn.addEventListener("click", async (e) => {
+              const id = btn.getAttribute("data-delete");
+              if (!confirm("Eliminar libro?")) return;
+              try {
+                const res = await fetch("/api/libros/eliminar/" + id, {
+                  method: "POST",
+                });
+                if (res.ok) {
+                  showBanner("success", "Libro eliminado");
+                  loadModule("libros");
+                } else showBanner("error", "No se pudo eliminar");
+              } catch (err) {
+                showBanner("error", "Error: " + err.message);
+              }
+            })
+          );
         }
         // add devolver and deleteUser functions for dynamic buttons
-        document.querySelectorAll('[data-delete-user]').forEach(btn=>btn.addEventListener('click', async ()=>{
-          const id = btn.getAttribute('data-delete-user');
-          if(!confirm('Eliminar usuario?')) return;
-          try{ const res = await fetch('/api/usuarios/' + id, { method: 'DELETE' });
-            if(res.ok){ showBanner('success','Usuario eliminado'); loadModule('usuarios'); }
-            else showBanner('error','No se pudo eliminar');
-          }catch(err){ showBanner('error','Error: '+err.message); }
-        }));
+        document.querySelectorAll("[data-delete-user]").forEach((btn) =>
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-delete-user");
+            if (!confirm("Eliminar usuario?")) return;
+            try {
+              const res = await fetch("/api/usuarios/" + id, {
+                method: "DELETE",
+              });
+              if (res.ok) {
+                showBanner("success", "Usuario eliminado");
+                loadModule("usuarios");
+              } else showBanner("error", "No se pudo eliminar");
+            } catch (err) {
+              showBanner("error", "Error: " + err.message);
+            }
+          })
+        );
 
-        document.querySelectorAll('[data-devolver]').forEach(btn=>btn.addEventListener('click', async ()=>{
-          const id = btn.getAttribute('data-devolver');
-          if(!confirm('Marcar como devuelto?')) return;
-          try{ const res = await fetch('/api/prestamos/devolver/' + id, { method: 'POST' });
-            if(res.ok){ showBanner('success','Préstamo devuelto'); loadModule('prestamos'); }
-            else showBanner('error', await res.text());
-          }catch(err){ showBanner('error','Error: '+err.message); }
-        }));
+        document.querySelectorAll("[data-devolver]").forEach((btn) =>
+          btn.addEventListener("click", async () => {
+            const id = btn.getAttribute("data-devolver");
+            if (!confirm("Marcar como devuelto?")) return;
+            try {
+              const res = await fetch("/api/prestamos/devolver/" + id, {
+                method: "POST",
+              });
+              if (res.ok) {
+                showBanner("success", "Préstamo devuelto");
+                loadModule("prestamos");
+              } else showBanner("error", await res.text());
+            } catch (err) {
+              showBanner("error", "Error: " + err.message);
+            }
+          })
+        );
+
+        // Formatear fechas después de inicializar el módulo
+        setTimeout(formatDates, 100);
       }
 
       // Función para mostrar banner (success|error|info)
-      function showBanner(type, message, timeout=3500){
-        const el = document.getElementById('app-banner');
-        if(!el) return;
-        let bg = '#333';
-        if(type==='success') bg = 'linear-gradient(90deg,#43a047,#66bb6a)';
-        if(type==='error') bg = 'linear-gradient(90deg,#e53935,#ef5350)';
-        if(type==='info') bg = 'linear-gradient(90deg,#1e88e5,#42a5f5)';
+      function showBanner(type, message, timeout = 3500) {
+        const el = document.getElementById("app-banner");
+        if (!el) return;
+        let bg = "#333";
+        if (type === "success")
+          bg = "linear-gradient(135deg, #2ecc71, #27ae60)";
+        if (type === "error") bg = "linear-gradient(135deg, #e74c3c, #c0392b)";
+        if (type === "info") bg = "linear-gradient(135deg, #3498db, #2980b9)";
         el.style.background = bg;
-        el.style.display = 'block';
+        el.style.display = "block";
         el.textContent = message;
         // animación simple
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(-6px)';
-        setTimeout(()=>{ el.style.transition='300ms'; el.style.opacity='1'; el.style.transform='translateY(0)'; },10);
-        if(timeout>0){ clearTimeout(el._timer); el._timer = setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.style.display='none',300); }, timeout); }
+        el.style.opacity = "0";
+        el.style.transform = "translateY(-10px) scale(0.95)";
+        setTimeout(() => {
+          el.style.transition =
+            "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0) scale(1)";
+        }, 10);
+        if (timeout > 0) {
+          clearTimeout(el._timer);
+          el._timer = setTimeout(() => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(-10px) scale(0.95)";
+            setTimeout(() => (el.style.display = "none"), 400);
+          }, timeout);
+        }
       }
     </script>
   </body>

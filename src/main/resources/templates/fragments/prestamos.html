@@ -20,11 +20,11 @@
 
   <div>
     <table>
-      <thead><tr><th>UsuarioId</th><th>LibroId</th><th>Inicio</th><th>Fin</th><th>Devuelto</th><th>Acciones</th></tr></thead>
+      <thead><tr><th>Usuario</th><th>Libro</th><th>Inicio</th><th>Fin</th><th>Devuelto</th><th>Acciones</th></tr></thead>
       <tbody>
         <tr th:each="p : ${prestamos}">
-          <td th:text="${p.usuarioId}"></td>
-          <td th:text="${p.libroId}"></td>
+          <td th:text="${p.usuarioNombre}"></td>
+          <td th:text="${p.libroTitulo}"></td>
           <td th:text="${p.fechaInicio}"></td>
           <td th:text="${p.fechaFin}"></td>
           <td th:text="${p.devuelto}"></td>
