@@ -1,0 +1,38 @@
+<div>
+  <h2>Préstamos</h2>
+  <div class="form-section">
+    <h3>Crear Préstamo</h3>
+    <div id="p-error" class="error" style="color:#b00020;margin-bottom:10px;display:none"></div>
+    <div class="form-group">
+      <label>Usuario</label>
+      <select id="p-usuario">
+        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Libro</label>
+      <select id="p-libro">
+        <option th:each="l : ${libros}" th:value="${l.id}" th:text="${l.titulo + ' (qty:' + l.cantidad + ')'}"></option>
+      </select>
+    </div>
+    <button id="btn-crear-prestamo" class="primary">Crear Préstamo</button>
+  </div>
+
+  <div>
+    <table>
+      <thead><tr><th>UsuarioId</th><th>LibroId</th><th>Inicio</th><th>Fin</th><th>Devuelto</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <tr th:each="p : ${prestamos}">
+          <td th:text="${p.usuarioId}"></td>
+          <td th:text="${p.libroId}"></td>
+          <td th:text="${p.fechaInicio}"></td>
+          <td th:text="${p.fechaFin}"></td>
+          <td th:text="${p.devuelto}"></td>
+          <td>
+            <button class="small-btn" th:if="${!p.devuelto}" data-devolver="" th:attr="data-devolver=${p.id}">Devolver</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

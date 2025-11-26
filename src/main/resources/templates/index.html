@@ -177,7 +177,7 @@
       <!-- Formulario para agregar libros -->
       <div class="form-section">
         <h2>Agregar Nuevo Libro</h2>
-        <form th:action="@{/agregar}" method="post" th:object="${libro}">
+        <form id="form-libro-index" onsubmit="return false;" th:object="${libro}">
           <div class="form-group">
             <label for="titulo">Título:</label>
             <input
@@ -208,7 +208,17 @@
               placeholder="Ej: 978-1234567890"
             />
           </div>
-          <button type="submit">Agregar Libro</button>
+          <div class="form-group">
+            <label for="cantidad">Cantidad (unidades):</label>
+            <input
+              type="number"
+              id="cantidad"
+              th:field="*{cantidad}"
+              min="1"
+              placeholder="1"
+            />
+          </div>
+          <button id="btn-agregar-libro-index" type="button">Agregar Libro</button>
         </form>
       </div>
 
@@ -234,6 +244,7 @@
               <th>Título</th>
               <th>Autor</th>
               <th>ISBN</th>
+              <th>Cantidad</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -242,19 +253,152 @@
               <td th:text="${libro.titulo}"></td>
               <td th:text="${libro.autor}"></td>
               <td th:text="${libro.isbn}"></td>
+              <td th:text="${libro.cantidad}"></td>
               <td class="actions">
-                <a
-                  th:href="@{/eliminar/{id}(id=${libro.id})}"
-                  class="btn-eliminar"
-                  onclick="return confirm('¿Estás seguro de eliminar este libro?')"
-                >
-                  🗑️ Eliminar
-                </a>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <button data-increment th:attr="data-increment=${libro.id}" class="btn-eliminar">➕+</button>
+                  <button data-decrement th:attr="data-decrement=${libro.id}" class="btn-eliminar">➖</button>
+                  <button data-delete th:attr="data-delete=${libro.id}" class="btn-eliminar" onclick="return confirm('¿Estás seguro de eliminar este libro?')">🗑️ Eliminar</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sección Usuarios -->
+      <h2 style="margin-top:30px">Usuarios</h2>
+      <div class="form-section">
+        <h3>Agregar Usuario</h3>
+        <div class="form-group"><label>Nombre</label><input id="u-nombre" placeholder="Nombre"></div>
+        <div class="form-group"><label>Email</label><input id="u-email" placeholder="email@ejemplo.com"></div>
+        <div class="form-group"><label>Teléfono</label><input id="u-telefono" placeholder="(opcional) 3001234567"></div>
+        <div class="form-group"><label>Fecha Nacimiento</label><input id="u-fechaNacimiento" placeholder="yyyy-MM-dd"></div>
+        <button id="btn-crear-usuario">Crear Usuario</button>
+      </div>
+
+      <div>
+        <table>
+          <thead>
+            <tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Fecha Nac.</th><th>Acciones</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="u : ${usuarios}">
+              <td th:text="${u.nombre}"></td>
+              <td th:text="${u.email}"></td>
+              <td th:text="${u.telefono}"></td>
+              <td th:text="${u.fechaNacimiento}"></td>
+              <td><button class="btn-eliminar" th:onclick="|deleteUser('${u.id}')|">Eliminar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sección Préstamos -->
+      <h2 style="margin-top:30px">Préstamos</h2>
+      <div class="form-section">
+        <h3>Crear Préstamo</h3>
+        <div class="form-group">
+          <label>Usuario</label>
+          <select id="p-usuario">
+            <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre}"></option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Libro</label>
+          <select id="p-libro">
+            <option th:each="l : ${libros}" th:value="${l.id}" th:text="${l.titulo + ' (qty:' + l.cantidad + ')'}"></option>
+          </select>
+        </div>
+        <button id="btn-crear-prestamo">Crear Préstamo</button>
+      </div>
+
+      <div>
+        <table>
+          <thead>
+            <tr><th>UsuarioId</th><th>LibroId</th><th>Inicio</th><th>Fin</th><th>Devuelto</th><th>Acciones</th></tr>
+          </thead>
+          <tbody>
+            <tr th:each="p : ${prestamos}">
+              <td th:text="${p.usuarioId}"></td>
+              <td th:text="${p.libroId}"></td>
+              <td th:text="${p.fechaInicio}"></td>
+              <td th:text="${p.fechaFin}"></td>
+              <td th:text="${p.devuelto}"></td>
+              <td>
+                <button class="btn-eliminar" th:if="${!p.devuelto}" th:onclick="|devolverPrestamo('${p.id}')|">Devolver</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+    <script>
+      // Intercept form and actions to use API endpoints (avoid legacy server routes)
+      document.getElementById('btn-agregar-libro-index').addEventListener('click', async function(e){
+        e.preventDefault();
+        const titulo = document.getElementById('titulo').value;
+        const autor = document.getElementById('autor').value;
+        const isbn = document.getElementById('isbn').value;
+        const cantidad = parseInt(document.getElementById('cantidad').value||'1',10) || 1;
+        try{
+          const res = await fetch('/api/libros/agregar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({titulo,autor,isbn,cantidad})});
+          if(res.ok){ location.reload(); } else { const txt = await res.text(); alert(txt||'Error al agregar libro'); }
+        }catch(err){ alert('Error: '+err.message); }
+      });
+
+      document.querySelectorAll('[data-increment]').forEach(btn=>btn.addEventListener('click', async (e)=>{
+        const id = btn.getAttribute('data-increment');
+        try{ const res = await fetch('/api/libros/incrementar/' + id, { method: 'POST' }); if(res.ok) location.reload(); else alert('No se pudo incrementar'); }catch(err){ alert('Error: '+err.message); }
+      }));
+
+      document.querySelectorAll('[data-decrement]').forEach(btn=>btn.addEventListener('click', async (e)=>{
+        const id = btn.getAttribute('data-decrement');
+        try{ const res = await fetch('/api/libros/decrementar/' + id, { method: 'POST' }); if(res.ok) location.reload(); else res.text().then(t=>alert(t)); }catch(err){ alert('Error: '+err.message); }
+      }));
+
+      document.querySelectorAll('[data-delete]').forEach(btn=>btn.addEventListener('click', async (e)=>{
+        const id = btn.getAttribute('data-delete');
+        if(!confirm('Eliminar libro?')) return;
+        try{ const res = await fetch('/api/libros/eliminar/' + id, { method: 'POST' }); if(res.ok) location.reload(); else alert('No se pudo eliminar'); }catch(err){ alert('Error: '+err.message); }
+      }));
+
+      // Crear usuario via API (JSON)
+      document.getElementById('btn-crear-usuario').addEventListener('click', function(e){
+        e.preventDefault();
+        const nombre = document.getElementById('u-nombre').value;
+        const email = document.getElementById('u-email').value;
+        const telefono = document.getElementById('u-telefono') ? document.getElementById('u-telefono').value : '';
+        const fechaNacimiento = document.getElementById('u-fechaNacimiento') ? document.getElementById('u-fechaNacimiento').value : '';
+        fetch('/api/usuarios/agregar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, email, telefono, fechaNacimiento })
+        }).then(r => {
+          if (r.ok) location.reload(); else r.text().then(t=>alert(t));
+        }).catch(err=>alert('Error: '+err));
+      });
+
+      function deleteUser(id){
+        if(!confirm('¿Eliminar usuario?')) return;
+        fetch('/api/usuarios/' + id, { method: 'DELETE' }).then(r=>{ if(r.ok) location.reload(); else alert('No se pudo eliminar'); });
+      }
+
+      document.getElementById('btn-crear-prestamo').addEventListener('click', function(e){
+        e.preventDefault();
+        const usuarioId = document.getElementById('p-usuario').value;
+        const libroId = document.getElementById('p-libro').value;
+        fetch('/api/prestamos/crear', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ usuarioId, libroId })
+        }).then(r=>{ if(r.ok) location.reload(); else r.text().then(t=>alert(t)); }).catch(err=>alert('Error: '+err));
+      });
+
+      function devolverPrestamo(id){
+        if(!confirm('Marcar como devuelto?')) return;
+        fetch('/api/prestamos/devolver/' + id, { method: 'POST' }).then(r=>{ if(r.ok) location.reload(); else r.text().then(t=>alert(t)); });
+      }
+    </script>
   </body>
 </html>

@@ -1,3 +1,8 @@
 com\mcic\controllers\BibliotecaController.class
 com\mcic\models\Libro.class
 com\mcic\BibliotecaApp.class
+com\mcic\models\Usuario.class
+com\mcic\models\Prestamo.class
+com\mcic\controllers\UsuarioController.class
+com\mcic\controllers\PrestamoController.class
+com\mcic\store\InMemoryStore.class

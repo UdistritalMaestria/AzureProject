@@ -1,0 +1,27 @@
+<div>
+  <h2>Usuarios</h2>
+  <div class="form-section">
+    <h3>Agregar Usuario</h3>
+    <div id="u-error" class="error" style="color:#b00020;margin-bottom:10px;display:none"></div>
+    <div class="form-group"><label>Nombre</label><input id="u-nombre" placeholder="Nombre"></div>
+    <div class="form-group"><label>Email</label><input id="u-email" placeholder="email@ejemplo.com"></div>
+    <div class="form-group"><label>Teléfono</label><input id="u-telefono" placeholder="(opcional) 3001234567"></div>
+    <div class="form-group"><label>Fecha Nacimiento</label><input id="u-fechaNacimiento" placeholder="yyyy-MM-dd"></div>
+    <button id="btn-crear-usuario" class="primary">Crear Usuario</button>
+  </div>
+
+  <div>
+    <table>
+      <thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Fecha Nac.</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <tr th:each="u : ${usuarios}">
+          <td th:text="${u.nombre}"></td>
+          <td th:text="${u.email}"></td>
+          <td th:text="${u.telefono}"></td>
+          <td th:text="${u.fechaNacimiento}"></td>
+          <td><button class="small-btn" data-delete-user="" th:attr="data-delete-user=${u.id}">Eliminar</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div>
+  <h2>Libros</h2>
+  <div class="form-section">
+    <h3>Agregar Nuevo Libro</h3>
+    <div id="l-error" class="error" style="color:#b00020;margin-bottom:10px;display:none"></div>
+    <form id="form-libro">
+      <div class="form-group">
+        <label for="titulo">Título:</label>
+        <input type="text" id="l-titulo" name="titulo" required placeholder="Título" />
+      </div>
+      <div class="form-group">
+        <label for="autor">Autor:</label>
+        <input type="text" id="l-autor" name="autor" required placeholder="Autor" />
+      </div>
+      <div class="form-group">
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="l-isbn" name="isbn" required placeholder="ISBN" />
+      </div>
+      <div class="form-group">
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="l-cantidad" name="cantidad" min="1" value="1" />
+      </div>
+      <button class="primary" type="submit">Agregar Libro</button>
+    </form>
+  </div>
+
+  <div>
+    <p>Total de libros: <strong th:text="${libros.size()}"></strong></p>
+    <table>
+      <thead>
+        <tr><th>Título</th><th>Autor</th><th>ISBN</th><th>Cantidad</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="libro : ${libros}">
+          <td th:text="${libro.titulo}"></td>
+          <td th:text="${libro.autor}"></td>
+          <td th:text="${libro.isbn}"></td>
+          <td th:text="${libro.cantidad}"></td>
+          <td>
+            <button class="small-btn" data-increment th:attr="data-increment=${libro.id}">➕</button>
+            <button class="small-btn" data-decrement th:attr="data-decrement=${libro.id}">➖</button>
+            <button class="small-btn" data-delete th:attr="data-delete=${libro.id}">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
