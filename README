@@ -1,31 +1,41 @@
 # Sistema de Gestión de Biblioteca
 
-Una aplicación web simple para gestionar una biblioteca, construida con Spring Boot.
+Una aplicación web completa para la gestión integral de bibliotecas, construida con Spring Boot y desplegada en Azure.
 
 ## Características
 
-- ✅ Agregar nuevos libros
-- ✅ Listar todos los libros
-- ✅ Eliminar libros
+### Módulos Principales
 
-## 📋 Prerrequisitos
+- **Gestión de Libros**: CRUD completo con validación de ISBN y control de stock
+- **Gestión de Usuarios**: Registro y administración de usuarios
+- **Gestión de Préstamos**: Sistema completo de préstamos y devoluciones
 
-- Java 17 o superior
-- Maven 3.6 o superior
-- Git
+### Stack Tecnológico
+
+**Backend:** Java 21, Spring Boot 3.x, Maven  
+**Frontend:** HTML5, CSS3, JavaScript, Thymeleaf  
+**Base de datos:** H2 (testing) + InMemory Store  
+**Despliegue:** Azure App Service, GitHub Actions
 
 ## Ejecución Local
 
+### Prerrequisitos
+- Java 21 o superior
+- Maven 3.6 o superior
+- Git
+
+**Ejecución de Aplicación**
 ```bash
 git clone https://github.com/UdistritalMaestria/AzureProject.git
 cd biblioteca
 mvn clean spring-boot:run
 ```
 
-## Ejecución Test
+**Ejecución de Tests**
 ```bash
 cd biblioteca
 mvn test
 ```
-Pagina web
+
+## Despliegue de Pagina Web 
 https://bibliotecadigitalnew-aehkeyf2cyahaycb.eastus2-01.azurewebsites.net/
