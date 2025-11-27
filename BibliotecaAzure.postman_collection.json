@@ -1,0 +1,936 @@
+{
+	"info": {
+		"_postman_id": "c3c9322f-ac08-4a8b-906f-f320323b3e53",
+		"name": "BibliotecaAzure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47634190",
+		"_collection_link": "https://murciagiseth-1348850.postman.co/workspace/Giseth-Murcia's-Workspace~d58c8ca1-8cb3-4d47-8bbc-efa83b2365af/collection/47634190-c3c9322f-ac08-4a8b-906f-f320323b3e53?action=share&source=collection_link&creator=47634190"
+	},
+	"item": [
+		{
+			"name": "Modulo Libros",
+			"item": [
+				{
+					"name": "Agregar Libro",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Verificar que la respuesta sea exitosa\r",
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    // Guardar el ID del libro creado para usar en otros tests\r",
+									"    pm.collectionVariables.set(\"libro_id\", response.id);\r",
+									"    \r",
+									"    console.log(\"Libro creado exitosamente:\");\r",
+									"    console.log(\"ID: \" + response.id);\r",
+									"    console.log(\"Título: \" + response.titulo);\r",
+									"    console.log(\"Autor: \" + response.autor);\r",
+									"    console.log(\"ISBN: \" + response.isbn);\r",
+									"    console.log(\"Cantidad: \" + response.cantidad);\r",
+									"    \r",
+									"    // Tests\r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Response has libro data\", function () {\r",
+									"        pm.expect(response).to.have.property('id');\r",
+									"        pm.expect(response).to.have.property('titulo');\r",
+									"        pm.expect(response).to.have.property('autor');\r",
+									"        pm.expect(response).to.have.property('isbn');\r",
+									"        pm.expect(response).to.have.property('cantidad');\r",
+									"    });\r",
+									"} else {\r",
+									"    console.log(\"Error: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"Cien años de soledad\",\n    \"autor\": \"Gabriel García Márquez\",\n    \"isbn\": \"978-8437604947\",\n    \"cantidad\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/libros/agregar",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"libros",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decrementar Stock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    console.log(\"Stock decrementado exitosamente para libro ID: \" + pm.collectionVariables.get(\"libro_id\"));\r",
+									"    \r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.log(\"Error al decrementar stock: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/libros/decrementar/{{libro_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"libros",
+								"decrementar",
+								"{{libro_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Libro",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 204) {\r",
+									"    console.log(\"Libro eliminado exitosamente: \" + pm.collectionVariables.get(\"libro_id\"));\r",
+									"    \r",
+									"    // Limpiar la variable\r",
+									"    pm.collectionVariables.unset(\"libro_id\");\r",
+									"    \r",
+									"    pm.test(\"Status code is 204\", function () {\r",
+									"        pm.response.to.have.status(204);\r",
+									"    });\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    console.log(\"Libro no encontrado\");\r",
+									"} else {\r",
+									"    console.log(\"Error: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/libros/eliminar/{{libro_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"libros",
+								"eliminar",
+								"{{libro_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test de Validación",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 400) {\r",
+									"    const errorMessage = pm.response.text();\r",
+									"    console.log(\"Validación funcionando correctamente: \" + errorMessage);\r",
+									"    \r",
+									"    pm.test(\"Status code is 400 for invalid data\", function () {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Error message is present\", function () {\r",
+									"        pm.expect(errorMessage).to.not.be.empty;\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"\",\n    \"autor\": \"\",\n    \"isbn\": \"123\",\n    \"cantidad\": -1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/libros/agregar",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"libros",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Modulo Usuarios",
+			"item": [
+				{
+					"name": "Listar Usuarios",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON array\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"    pm.expect(pm.response.json()).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"console.log(\"Usuarios encontrados: \" + pm.response.json().length);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/usuarios",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    // Guardar el ID del usuario creado para otros tests\r",
+									"    pm.collectionVariables.set(\"usuario_id\", response.id);\r",
+									"    pm.collectionVariables.set(\"usuario_email\", response.email);\r",
+									"    \r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Response has usuario data\", function () {\r",
+									"        pm.expect(response).to.have.property('id');\r",
+									"        pm.expect(response).to.have.property('nombre', 'Juan Pérez');\r",
+									"        pm.expect(response).to.have.property('email', 'juan.perez@email.com');\r",
+									"        pm.expect(response).to.have.property('telefono', '+57 300 123 4567');\r",
+									"        pm.expect(response).to.have.property('fechaNacimiento', '1990-05-15');\r",
+									"        pm.expect(response).to.have.property('fechaRegistro');\r",
+									"    });\r",
+									"    \r",
+									"    console.log(\"Usuario creado - ID: \" + response.id);\r",
+									"} else {\r",
+									"    console.log(\"Error: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Juan Pérez\",\n    \"email\": \"juan.perez@email.com\",\n    \"telefono\": \"+57 300 123 4567\",\n    \"fechaNacimiento\": \"1990-05-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/usuarios/agregar",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Usuario por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Usuario data is correct\", function () {\r",
+									"        pm.expect(response.id).to.equal(pm.collectionVariables.get(\"usuario_id\"));\r",
+									"        pm.expect(response.nombre).to.equal('Juan Pérez');\r",
+									"        pm.expect(response.email).to.equal('juan.perez@email.com');\r",
+									"    });\r",
+									"    \r",
+									"    console.log(\"Usuario obtenido: \" + response.nombre);\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    console.log(\"Usuario no encontrado\");\r",
+									"} else {\r",
+									"    console.log(\"Error: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/usuarios/{{usuario_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"{{usuario_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Usuario actualizado correctamente\", function () {\r",
+									"        pm.expect(response.nombre).to.equal('Juan Carlos Pérez');\r",
+									"        pm.expect(response.telefono).to.equal('+57 301 987 6543');\r",
+									"        // Email debería permanecer igual\r",
+									"        pm.expect(response.email).to.equal(pm.collectionVariables.get(\"usuario_email\"));\r",
+									"    });\r",
+									"    \r",
+									"    console.log(\"Usuario actualizado: \" + response.nombre);\r",
+									"} else {\r",
+									"    console.log(\"Error: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Juan Carlos Pérez\",\n    \"telefono\": \"+57 301 987 6543\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/usuarios/{{usuario_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"{{usuario_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 204) {\r",
+									"    pm.test(\"Status code is 204\", function () {\r",
+									"        pm.response.to.have.status(204);\r",
+									"    });\r",
+									"    \r",
+									"    // Limpiar variables\r",
+									"    pm.collectionVariables.unset(\"usuario_id\");\r",
+									"    pm.collectionVariables.unset(\"usuario_email\");\r",
+									"    \r",
+									"    console.log(\"Usuario eliminado exitosamente\");\r",
+									"} else if (pm.response.code === 404) {\r",
+									"    console.log(\"Usuario no encontrado para eliminar\");\r",
+									"} else {\r",
+									"    console.log(\"Error: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/usuarios/{{usuario_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"{{usuario_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test de Validación",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for invalid data\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message is present\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"console.log(\"Validación funcionando: \" + pm.response.text());"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"\",\n    \"email\": \"email-invalido\",\n    \"fechaNacimiento\": \"2025-12-31\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/usuarios/agregar",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Modulo Prestamos",
+			"item": [
+				{
+					"name": "Crear Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"usuario_id\", response.id);\r",
+									"    pm.collectionVariables.set(\"usuario_nombre\", response.nombre);\r",
+									"    console.log(\"Usuario creado - ID: \" + response.id);\r",
+									"} else {\r",
+									"    console.log(\"Error creando usuario: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"María García\",\n    \"email\": \"maria.garcia@email.com\", \n    \"telefono\": \"+57 310 555 1234\",\n    \"fechaNacimiento\": \"1985-08-20\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/usuarios/agregar",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Libro",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"libro_id\", response.id);\r",
+									"    pm.collectionVariables.set(\"libro_titulo\", response.titulo);\r",
+									"    console.log(\"Libro creado - ID: \" + response.id + \", Stock: \" + response.cantidad);\r",
+									"} else {\r",
+									"    console.log(\"Error creando libro: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"El Quijote de la Mancha\",\n    \"autor\": \"Miguel de Cervantes\",\n    \"isbn\": \"978-8467031254\",\n    \"cantidad\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/libros/agregar",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"libros",
+								"agregar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Préstamo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    // Guardar el ID del préstamo para otros tests\r",
+									"    pm.collectionVariables.set(\"prestamo_id\", response.id);\r",
+									"    \r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Préstamo creado correctamente\", function () {\r",
+									"        pm.expect(response).to.have.property('id');\r",
+									"        pm.expect(response).to.have.property('usuarioId', pm.collectionVariables.get(\"usuario_id\"));\r",
+									"        pm.expect(response).to.have.property('libroId', pm.collectionVariables.get(\"libro_id\"));\r",
+									"        pm.expect(response).to.have.property('usuarioNombre', pm.collectionVariables.get(\"usuario_nombre\"));\r",
+									"        pm.expect(response).to.have.property('libroTitulo', pm.collectionVariables.get(\"libro_titulo\"));\r",
+									"        pm.expect(response).to.have.property('fechaInicio');\r",
+									"        pm.expect(response).to.have.property('devuelto', false);\r",
+									"    });\r",
+									"    \r",
+									"    console.log(\"Préstamo creado - ID: \" + response.id);\r",
+									"} else {\r",
+									"    console.log(\"Error creando préstamo: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuarioId\": \"{{usuario_id}}\",\n    \"libroId\": \"{{libro_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/prestamos/crear",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"prestamos",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Préstamos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const prestamos = pm.response.json();\r",
+									"console.log(\"Préstamos encontrados: \" + prestamos.length);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/prestamos",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Devolver Préstamo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"    const response = pm.response.json();\r",
+									"    \r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
+									"    \r",
+									"    pm.test(\"Préstamo devuelto correctamente\", function () {\r",
+									"        pm.expect(response).to.have.property('devuelto', true);\r",
+									"        pm.expect(response).to.have.property('fechaFin');\r",
+									"        pm.expect(response.fechaFin).to.not.be.null;\r",
+									"    });\r",
+									"    \r",
+									"    console.log(\"Préstamo devuelto exitosamente - Fecha: \" + response.fechaFin);\r",
+									"} else {\r",
+									"    console.log(\"Error devolviendo préstamo: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/prestamos/devolver/{{prestamo_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"prestamos",
+								"devolver",
+								"{{prestamo_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test datos inválidos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 for invalid data\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"console.log(\"Validación funcionando: \" + pm.response.text());"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuarioId\": \"usuario-inexistente\",\n    \"libroId\": \"libro-inexistente\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_host}}/api/prestamos/crear",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"prestamos",
+								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test préstamo ya devuelto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 400) {\r",
+									"    pm.test(\"Status code is 400 for already returned loan\", function () {\r",
+									"        pm.response.to.have.status(400);\r",
+									"    });\r",
+									"    console.log(\"Validación de devolución duplicada funcionando: \" + pm.response.text());\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url_host}}/api/prestamos/devolver/{{prestamo_id}}",
+							"host": [
+								"{{url_host}}"
+							],
+							"path": [
+								"api",
+								"prestamos",
+								"devolver",
+								"{{prestamo_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "usuario_id",
+			"value": ""
+		},
+		{
+			"key": "usuario_nombre",
+			"value": ""
+		},
+		{
+			"key": "libro_id",
+			"value": ""
+		},
+		{
+			"key": "libro_titulo",
+			"value": ""
+		},
+		{
+			"key": "prestamo_id",
+			"value": ""
+		}
+	]
+}
