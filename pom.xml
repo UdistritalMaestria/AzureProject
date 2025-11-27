@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                             
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>com.biblioteca</groupId>
     <artifactId>biblioteca-simple</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -17,7 +18,7 @@
         <junit.version>5.9.2</junit.version>
         <cucumber.version>7.18.0</cucumber.version>
     </properties>
-    
+
     <dependencies>
         <!-- Spring Boot Web -->
         <dependency>
@@ -25,15 +26,15 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>3.1.0</version>
         </dependency>
-        
+
         <!-- Thymeleaf para templates HTML -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>3.1.0</version>
         </dependency>
-        
-        <!-- JUnit 5 para pruebas unitarias -->
+
+        <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -46,23 +47,24 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        
-        <!-- JUnit Platform Suite API (necesario para @Suite en Cucumber Runner) -->
+
+        <!-- Platform Suite API (Cucumber Runner) -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-api</artifactId>
             <version>1.9.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- JUnit Platform Suite Engine: permite descubrimiento/ejecución de clases anotadas con @Suite -->
+
+        <!-- Platform Suite Engine -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-engine</artifactId>
             <version>1.9.2</version>
             <scope>test</scope>
         </dependency>
-        
-        <!-- Cucumber para BDD -->
+
+        <!-- Cucumber -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
@@ -76,10 +78,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
-            <!-- Plugin Spring Boot: genera un JAR ejecutable -->
+
+            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -92,8 +95,8 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <!-- Surefire: ejecuta tests unitarios + Cucumber -->
+
+            <!-- Surefire: ejecuta pruebas -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -104,8 +107,8 @@
                     </includes>
                 </configuration>
             </plugin>
-            
-            <!-- JaCoCo para cobertura -->
+
+            <!-- JaCoCo -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -125,6 +128,15 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- 🔥 Sonar Scanner Maven Plugin (ESTE ES EL QUE NECESITA) -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>5.3.0.6276</version>
+            </plugin>
+
         </plugins>
     </build>
+
 </project>
