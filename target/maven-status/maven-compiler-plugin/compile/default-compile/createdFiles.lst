@@ -1,8 +1,14 @@
 com\mcic\controllers\BibliotecaController.class
 com\mcic\models\Libro.class
 com\mcic\BibliotecaApp.class
+com\mcic\config\SecurityHeadersConfig.class
 com\mcic\models\Usuario.class
+com\mcic\config\SpringSecurityConfig.class
+com\mcic\config\CorsConfig.class
+com\mcic\config\GlobalExceptionHandler.class
 com\mcic\models\Prestamo.class
 com\mcic\controllers\UsuarioController.class
 com\mcic\controllers\PrestamoController.class
 com\mcic\store\InMemoryStore.class
+com\mcic\config\SecurityHeadersConfig$SecurityHeadersInterceptor.class
+com\mcic\config\SecurityFilter.class
